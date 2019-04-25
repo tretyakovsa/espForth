@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="windows-1251">
+  <title>Forth console</title>
+ </head>
+ <body>
+  <script>
+   var connection = new WebSocket("ws://"+window.location.host+":82", ['arduino']);
+   connection.onmessage = function (e) {
+    console.log('Server: ', e.data);
+    document.getElementById('console').value += e.data;
+    document.getElementById('console').scrollTop = document.getElementById("console").scrollHeight;
+   }
+   function onChange() {
+    if (window.event.keyCode === 13) {
+     var console = document.getElementById("console").value;
+     connection.send(console.split('>')[console.split('>').length-1]);
+     return true;
+    }
+   }
+  </script>
+  <textarea id="console" style="width:100%;height:100%;" onkeypress="onChange();" cols="30" rows="30"></textarea>
+ </body>
+</html>
